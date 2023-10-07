@@ -12,6 +12,7 @@ const initialState = {
   matchUsers: [],
   subscriptionUsers: [],
   seekerRequests: [],
+  meetings: [],
 };
 
 const authReducer = (state = initialState, action) => {
@@ -105,6 +106,12 @@ const authReducer = (state = initialState, action) => {
         ...state,
         allUsers: action.payload.allUsers,
         seekerRequests: action.payload.seekers,
+      };
+    case UserActionTypes.GET_ALL_MEETINGS:
+      return {
+        ...state,
+        // allUsers: action.payload.allUsers,
+        meetings: action.payload.meetings,
       };
     default:
       return state;

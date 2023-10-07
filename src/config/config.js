@@ -4,3 +4,5 @@ export const CLOUDINARY_CLOUD_NAME = 'dyv2pftfd';
 export const STRIPE_PUBLIC_KEY = 'pk_test_51N3SR4SD6UvKCkuQSGbaw6dhFyPeeHM51cdHBA1fOGvbxt4LEVjhOsZeKTkZ0QrAPECCeFMiS6gY3HXejfXDqdq5002uik7qth';
 export const STRIPE_CLOUD_SERVER_URL = 'http://localhost:5000/epicbae-246b2/us-central1/payWithStripe';
 export const IS_STRIPE_LIVE = false;
+//firebase
+export const VAPID_KEY="BNLkZ36KL9DPe9W1C6zxKAzYBLYHOwXOPSz1PKQ8hXSN1gLgRyyZkzytI6pmXnixF57x_gSc--j7q1AIk9tNvko"

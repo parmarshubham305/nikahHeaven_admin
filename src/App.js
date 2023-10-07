@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './scss/style.scss';
 import {connect} from 'react-redux';
-import {authObserver} from './actions/userAction';
+import {authObserver, getFCMTokenAndStore} from './actions/userAction';
 import PrivateRoute from './privateRoute';
 
 const loading = (
