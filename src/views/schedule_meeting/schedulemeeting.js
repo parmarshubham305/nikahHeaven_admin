@@ -4,7 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { CForm, CFormGroup, CInput, CFormText, CTextarea, CBadge, CCard, CCardBody, CCardHeader, CCol, CDataTable, CRow, CLabel, CDropdown, CDropdownToggle, CSelect, CCardText, CCardTitle, CButton } from "@coreui/react";
+import { CForm, CFormGroup, CInput, CFormText, CTextarea, CBadge, CCard, CCardBody, CCardHeader, CCol, CDataTable, CRow, CLabel, CDropdown, CDropdownToggle, CSelect, CCardText, CCardTitle, CButton, CSpinner } from "@coreui/react";
 import { MdMoreHoriz } from "react-icons/md";
 
 import { connect } from "react-redux";
@@ -33,6 +33,7 @@ const ScheduleMeeting = (props) => {
     //states
     const [page, setPage] = useState(currentPage);
     const [isNotificationEdit, setIsNotificationEdit] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         meeting_dateAndTime: new Date(),
         meeting_country: Countries[0]?.value,
@@ -80,6 +81,7 @@ const ScheduleMeeting = (props) => {
 
     const handleSchedule = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         if (isValidMeetingDate(formData?.meeting_dateAndTime) && isValidCountry()) {
             // Handle form submission
             const res = await fetch("http://localhost:5000/schedule-meeting", {
@@ -91,12 +93,20 @@ const ScheduleMeeting = (props) => {
             });
             if (res?.ok) {
                 props.getAllMeetings();
+                setIsLoading(false);
             }
             console.log("res", res);
+            setIsLoading(false);
         } else {
             // Display an error message or take other appropriate actions
             console.log("Form validation failed!");
+            setIsLoading(false);
         }
+    };
+
+    const handleNotificationCancel = () => {
+        setFormData((prev) => ({ ...prev, notification_title: "Meeting Scheduled", notification_description: `You have a meeting scheduled for ${new Date()}. The meeting will take place in ${Countries[0]?.label}. Please be prepared and join on time.` }));
+        setIsNotificationEdit(false);
     };
 
     // const acceptAction = item => {
@@ -181,7 +191,7 @@ const ScheduleMeeting = (props) => {
                                                 <CButton color="primary" onClick={handleNotificationSave}>
                                                     Save
                                                 </CButton>
-                                                <CButton color="secondary" className="m-1" onClick={() => setIsNotificationEdit(false)}>
+                                                <CButton color="secondary" className="m-1" onClick={() => handleNotificationCancel()}>
                                                     cancel
                                                 </CButton>
                                             </div>
@@ -197,8 +207,11 @@ const ScheduleMeeting = (props) => {
                                     </CButton> */}
                                 </CCardBody>
                             </CCard>
-                            <CButton color="primary" type="submit">
-                                Schedule and Push Notification
+                            <CButton color="primary" type="submit" disabled={isLoading}>
+                                Schedule and Push Notification{" "}
+                                {isLoading && (
+                                    <CSpinner size="sm"/>
+                                )}
                             </CButton>
                         </CForm>
                     </CCardBody>

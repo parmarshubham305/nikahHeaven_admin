@@ -77,9 +77,15 @@ app.post("/schedule-meeting", async (req, res) => {
         };
 
         const tokens = await getFCMTokensByCountry(payload.meeting_country);
-        console.log("tokens==>", tokens);
         if (tokens.length > 0) {
-            const sendRes = await sendNotification(tokens, notification);
+            sendNotifications(tokens, notification).then((success) => {
+                if (success) {
+                    console.log("All notifications sent successfully.");
+                } else {
+                    console.log("Some notifications failed to send.");
+                }
+            });
+            // const sendRes = await sendNotification(tokens, notification);
             if (meetingDoc.id) {
                 res.status(201).json({ message: "Meeting scheduled successfully", id: meetingDoc.id });
             } else {
@@ -94,25 +100,98 @@ app.post("/schedule-meeting", async (req, res) => {
         res.status(500).json({ error: "Unable to schedule meeting" });
     }
 });
-function sendNotification(tokens, notification) {
+// function sendNotification(tokens, notification) {
+//     // const femTokens=tokens?.map((item)=>item?.fcmToken)
+
+//     tokens?.forEach((item) => {
+//         try {
+//             const message = {
+//                 data: {
+//                     userId: item?.userId,
+//                 },
+//                 notification: notification,
+//                 // tokens: femTokens,
+//                 token: item?.fcmToken,
+//             };
+//             admin
+//                 .messaging()
+//                 .sendMulticast(message)
+//                 .then((response) => {
+//                     console.log("Successfully sent notification to filtered users:", response);
+//                     return true;
+//                 })
+//                 .catch((error) => {
+//                     console.error("Error sending notification to filtered users:", error);
+//                     return false;
+//                 });
+//         } catch (error) {
+//             console.log("error-->", error);
+//         }
+//     });
+// }
+
+async function storeNotification(userId, notification) {
+    const db = admin.firestore();
+    const notificationsRef = db.collection("notifications");
+
     try {
-        const message = {
+        const createdAt = admin.firestore.FieldValue.serverTimestamp();
+        const uuid = uuidv4();
+
+        const notificationData = {
+            userId: userId,
+            createdAt: createdAt,
+            uuid: uuid,
             notification: notification,
-            tokens: tokens,
+            notificationType: "scheduleMeeting",
         };
-        admin
-            .messaging()
-            .sendMulticast(message)
-            .then((response) => {
-                console.log("Successfully sent notification to filtered users:", response);
-                return true;
-            })
-            .catch((error) => {
-                console.error("Error sending notification to filtered users:", error);
-                return false;
-            });
+
+        await notificationsRef.add(notificationData);
+        console.log("Notification stored successfully.");
+        return true;
     } catch (error) {
-        console.log("error-->", error);
+        console.error("Error storing notification:", error);
+        return false;
+    }
+}
+
+async function sendNotifications(tokens, notification) {
+    try {
+        const messages = tokens?.map((item) => ({
+            data: {
+                userId: item?.userId,
+            },
+            notification: notification,
+            token: item?.fcmToken,
+        }));
+
+        const sendPromises = messages.map(async (message) => {
+            await storeNotification(message.data.userId, message.notification);
+            return admin.messaging().send(message);
+            // if (response.successCount > 0) {
+            // }
+        });
+
+        const results = await Promise.all(sendPromises);
+
+        results.forEach((response, index) => {
+            if (response.failureCount > 0) {
+                const failedTokens = [];
+                response.responses.forEach((resp, respIndex) => {
+                    if (!resp.success) {
+                        failedTokens.push(tokens[index].fcmToken);
+                    }
+                });
+                console.error(`Failed to send notifications to tokens: ${failedTokens.join(", ")}`);
+            } else {
+                console.log(`Successfully sent notification to user with userId: ${tokens[index].userId}`);
+            }
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Error sending notifications:", error);
+        return false;
     }
 }
 
@@ -129,7 +208,7 @@ async function getFCMTokensByCountry(country) {
                     const userData = doc.data();
                     const fcmToken = userData.fcmToken;
                     if (fcmToken) {
-                        tokens.push(fcmToken);
+                        tokens.push({ fcmToken, userId: userData?.uid });
                     }
                 });
 
