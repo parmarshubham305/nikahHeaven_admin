@@ -81,6 +81,8 @@ const ScheduleMeeting = (props) => {
         return true;
     };
 
+    console.log('authUser-->', authUser)
+
     const handleSchedule = async (e) => {
         e.preventDefault();
         setIsLoading(true);

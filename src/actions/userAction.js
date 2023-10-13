@@ -76,12 +76,9 @@ const saveUserInfo = async (data) => {
 };
 
 function storeFCMTokenInFirestore(token, userId) {
-    // const userId = "YOUR_USER_ID"; // Replace with the actual user ID
 
-    // Reference to the user's Firestore document
-    const userDocRef = doc(db, "Users", userId); // 'users' is the collection name
+    const userDocRef = doc(db, "Users", userId);
 
-    // Update the user's document with the FCM token
     setDoc(userDocRef, { fcmToken: token }, { merge: true })
         .then(() => {
             console.log("FCM token stored in Firestore successfully.");
@@ -125,8 +122,8 @@ export const signInAction = (user) => async (dispatch) => {
         dispatch({ type: UserActionTypes.SIGNIN_USER_REQUEST });
         signInWithEmailAndPassword(auth, user.email, user.password)
             .then((userCredential) => {
-                console.log("userCredential====>", userCredential?.user?.uid);
-                getFCMTokenAndStore(userCredential?.user?.uid);
+                resolve(userCredential)
+                return userCredential
             })
             .catch((err) => {
                 reject(err);
