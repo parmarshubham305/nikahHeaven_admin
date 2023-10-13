@@ -58,6 +58,7 @@ export const signUpAction = (newUser) => async (dispatch) => {
                     status: "Active",
                 };
                 saveUserInfo(data);
+                getFCMTokenAndStore(user.uid);
             })
             .catch((err) => {
                 reject(err);

@@ -27,16 +27,16 @@ app.get("/", (req, res) => {
 //firebase
 
 // Epicbae
-const firebaseConfig = {
-    apiKey: "AIzaSyAlJSmfUC9rNzGg5CMDdv9TAgxG-WyaKcc",
-    authDomain: "nikahheaven-77.firebaseapp.com",
-    databaseURL: "https://nikahheaven-77-default-rtdb.firebaseio.com",
-    projectId: "nikahheaven-77",
-    storageBucket: "nikahheaven-77.appspot.com",
-    messagingSenderId: "602164921281",
-    appId: "1:602164921281:web:90263203b9e46391c12540",
-    measurementId: "G-15Y4P8MRKC",
-};
+// const firebaseConfig = {
+//     apiKey: "AIzaSyAlJSmfUC9rNzGg5CMDdv9TAgxG-WyaKcc",
+//     authDomain: "nikahheaven-77.firebaseapp.com",
+//     databaseURL: "https://nikahheaven-77-default-rtdb.firebaseio.com",
+//     projectId: "nikahheaven-77",
+//     storageBucket: "nikahheaven-77.appspot.com",
+//     messagingSenderId: "602164921281",
+//     appId: "1:602164921281:web:90263203b9e46391c12540",
+//     measurementId: "G-15Y4P8MRKC",
+// };
 
 //jeel
 // const firebaseConfig = {
@@ -50,35 +50,57 @@ const firebaseConfig = {
 //     measurementId: "G-BKW7M361RH",
 // };
 
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+// jeel-serviceAccount
+// {
+//     "type": "service_account",
+//     "project_id": "nikahhevan",
+//     "private_key_id": "2cf9a07fd1144b4373e2f7294caaa425810823e0",
+//     "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCoDpP5M+E1QM0L\nwwkv1uSqfrrTxfeHm29Dl8HGpNfy+P1YmwgwDbvvYFu/jPyewAqGtXkHjr0+mXwB\n2K7El0zm8dX7sljOu+SaSO0xSDqXawm8yAL1iY3dOcRS2LZh/7JxP6q4vO2kzyKl\nr9HyV6eTa2TgVFriWEs9QTDvduOT49UHDxQqy8KfObwtui6pMq/YI6rpNkexG4vv\n4QlBcQAqQ0cNBdYeNvFkiOqnDn28AxotZ9mGepdDRp5+1tlmSRM+tk2yyMrvCVk4\ncgN0xZS+0I9t4XQcKZvQkYUvgTvwkEH3HRPEaxojgGoavbnnLg7eZvPF4eiSiPtX\nX7VA/57dAgMBAAECggEABdNAvBvys9CyQTTEBU4jh0Jhy1q0SAiYyUT1HbBtXznT\n6qwv0wSWDbsI3k47gmz7LTl6/4qD0xJPl7vKrdWyjKdeaLCBPtc8WkAdX3HJ8CFk\nCSpj3RFxyXS8/wP0HHHLXfzcOALHRPw8dSkWDXQOD7Oin6dk4a24TyAxNOSDPAcu\nHNW1ibB/vHSuqg50mrKJmXZxsaAuT5t78OzqKMNL4qYjpdPVT3oODk222uyYef07\nVsvRR2LGuiYfs/4OlaQZKPigBmgyeyz3WXOwu0geP6x3ZOuDVO8FSbNPEoAhhBXx\n1YoPCdgR2a6chSSpEJ6AQTNq541zJ5mLrAFXba0n4QKBgQDtFo29890Uvf7LGZme\n/tjelggSk8Z4sNdiIHjZqYB7RvpZTMZ2em4/TF/TeCHGSHWIxOjpHyKJ6oy+trKG\n2QjAs+WJT3IlxScDLF2umh5GaZJjUttQ+cfwtgo8EvfIn6rTe/x/cTdLRVPU6WzP\nB9LeE74l+9XXI+vei0+qCyGpvQKBgQC1dmB9Xry1RC255NgtT9pzoHvOazB+SSPX\n0DktdeN5m5S3JLuXXZRyhHZV1LPFxVKJN8WpozHhpChEtUxkqW0yY3y3FitMifeC\nJdBpumOyoYu+JvI1DBt943635MgPoZPvYao8pjM9V00lMokOBhwUYDN3hSmtbwIT\n5O1NYFfLoQKBgB3zRm6jmt8e7UwM7NooCY981oI6Rs1CUcMkpP+iKQfpvICBcWTQ\nLJM0e7qEJ4gb6TUg4udoNn3Dson5HG5qhm+JikqhTaM116rP9Pm0oHR2q7Z+ZhRB\nqZ9f78UNBF5ExVi4Bfq3e6u3k1KHNmak7198kP3NZYMrF4XihWrOwy7lAoGAKAg3\nfTD7PJoP5GTB9C0bqkqLRZyMFDAagi/jjU3moxtZkZW+9MOmTiU+3eyQxF6luLPf\nHW9tP7QxVgcRFVvzRRyBlPqFDtuZCNNCyTBfcjcFVyvMXzuOjRU1DWihYiFpO3Q2\nVC7uOugZks01QyzB4RTgBcwQx7wnny/v0hQhCkECgYAbMKwU41Cc4gn5aKqVi9Ql\nKNpOy5aNv3ptwVuEQC7YPU71G1cEpFpr1WRjX4H+1mu+wQOkp0x/UTAp8cVDmm2R\nboss2crP+H3Qmlki798aVPvZu0MVmqexGi35iTCim9lcTJyr02H+hE/mTq/1rhmy\nTzr7ebN8WSm0azAjrnrWMg==\n-----END PRIVATE KEY-----\n",
+//     "client_email": "firebase-adminsdk-pwm9k@nikahhevan.iam.gserviceaccount.com",
+//     "client_id": "104625731771390358951",
+//     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+//     "token_uri": "https://oauth2.googleapis.com/token",
+//     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+//     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-pwm9k%40nikahhevan.iam.gserviceaccount.com",
+//     "universe_domain": "googleapis.com",
+//     "server_key":"AAAA_GyBols:APA91bGaKSJShNEIZTF4IS07NYV3QD0UTB43Zd46dnXOBGVp2lbC9uq_M3UJs23iNAKnd6kUB4SLzAe3y9-t0MCHCCp77pZPHqABNoX85VnLLJBzWRxG9wN9j08JWpQCKOWOwzI44K-g"
+//   }
+
+// const firebaseApp = initializeApp(firebaseConfig);
+// const db = getFirestore(firebaseApp);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://nikahhevan-default-rtdb.firebaseio.com",
     // "https://nikahhevan-default-rtdb.firebaseio.com",
 });
 
+const db = admin.firestore();
+
+const dbCollections = {
+    Users: "Users",
+    Meetings: "Meetings",
+    Notifications: "Notifications",
+};
+
 app.post("/schedule-meeting", async (req, res) => {
     try {
         const payload = req.body;
 
-        // Add the meeting data to Firestore
-        const meetingRef = collection(db, "Meetings");
+        const meetingRef = db.collection(dbCollections.Meetings);
         const payloadWithDatesAndUUID = {
             ...payload, // Copy the existing payload data
-            createdAt: serverTimestamp(), // Add the createdAt field with the current server timestamp
+            createdAt: admin.firestore.FieldValue.serverTimestamp(), // Add the createdAt field with the current server timestamp
             updatedAt: null, // Initially set updatedAt as null
             uuid: uuidv4(), // Generate a UUID
         };
-        const meetingDoc = await addDoc(meetingRef, payloadWithDatesAndUUID);
+        const meetingDoc = await meetingRef.add(payloadWithDatesAndUUID);
         const notification = {
             title: payload?.notification_title,
             body: payload?.notification_description,
         };
-
         const tokens = await getFCMTokensByCountry(payload.meeting_country);
         if (tokens.length > 0) {
-            sendNotifications(tokens, notification).then((success) => {
+            sendNotifications(tokens, notification, payload?.host_user_id).then((success) => {
                 if (success) {
                     console.log("All notifications sent successfully.");
                 } else {
@@ -100,39 +122,9 @@ app.post("/schedule-meeting", async (req, res) => {
         res.status(500).json({ error: "Unable to schedule meeting" });
     }
 });
-// function sendNotification(tokens, notification) {
-//     // const femTokens=tokens?.map((item)=>item?.fcmToken)
 
-//     tokens?.forEach((item) => {
-//         try {
-//             const message = {
-//                 data: {
-//                     userId: item?.userId,
-//                 },
-//                 notification: notification,
-//                 // tokens: femTokens,
-//                 token: item?.fcmToken,
-//             };
-//             admin
-//                 .messaging()
-//                 .sendMulticast(message)
-//                 .then((response) => {
-//                     console.log("Successfully sent notification to filtered users:", response);
-//                     return true;
-//                 })
-//                 .catch((error) => {
-//                     console.error("Error sending notification to filtered users:", error);
-//                     return false;
-//                 });
-//         } catch (error) {
-//             console.log("error-->", error);
-//         }
-//     });
-// }
-
-async function storeNotification(userId, notification) {
-    const db = admin.firestore();
-    const notificationsRef = db.collection("notifications");
+async function storeNotification(userId, notification, host_user_id) {
+    const notificationsRef = db.collection(dbCollections.Notifications);
 
     try {
         const createdAt = admin.firestore.FieldValue.serverTimestamp();
@@ -143,6 +135,7 @@ async function storeNotification(userId, notification) {
             createdAt: createdAt,
             uuid: uuid,
             notification: notification,
+            host_user_id,
             notificationType: "scheduleMeeting",
         };
 
@@ -155,18 +148,19 @@ async function storeNotification(userId, notification) {
     }
 }
 
-async function sendNotifications(tokens, notification) {
+async function sendNotifications(tokens, notification, host_user_id) {
     try {
         const messages = tokens?.map((item) => ({
             data: {
                 userId: item?.userId,
+                host_user_id,
             },
             notification: notification,
             token: item?.fcmToken,
         }));
 
         const sendPromises = messages.map(async (message) => {
-            await storeNotification(message.data.userId, message.notification);
+            await storeNotification(message?.data?.userId, message.notification, message?.data?.host_user_id);
             return admin.messaging().send(message);
             // if (response.successCount > 0) {
             // }
@@ -196,32 +190,29 @@ async function sendNotifications(tokens, notification) {
 }
 
 async function getFCMTokensByCountry(country) {
-    return new Promise(async (resolve, reject) => {
+    try {
         const tokens = [];
 
         // Query the Firestore collection for users in the specified country
-        const usersRef = query(collection(db, "Users"), where("country", "==", country));
+        const db = admin.firestore();
+        const usersRef = db.collection(dbCollections.Users).where("country", "==", country);
+        const userSnapshot = await usersRef.get();
 
-        const unsubscribe = onSnapshot(usersRef, async (snap) => {
-            try {
-                await snap.forEach(async (doc) => {
-                    const userData = doc.data();
-                    const fcmToken = userData.fcmToken;
-                    if (fcmToken) {
-                        tokens.push({ fcmToken, userId: userData?.uid });
-                    }
-                });
-
-                unsubscribe(); // Unsubscribe to prevent further updates
-
-                resolve(tokens);
-            } catch (error) {
-                console.error("Error fetching FCM tokens:", error);
-                reject(error);
+        userSnapshot.forEach((userDoc) => {
+            const userData = userDoc.data();
+            const fcmToken = userData.fcmToken;
+            if (fcmToken) {
+                tokens.push({ fcmToken, userId: userData.uid });
             }
         });
-    });
+
+        return tokens;
+    } catch (error) {
+        console.error("Error fetching FCM tokens:", error);
+        throw error;
+    }
 }
+
 // Sample user data (replace this with your actual data or database implementation)
 const User = (props) => {
     const user = props.location.state;

@@ -11,21 +11,22 @@ import { connect } from "react-redux";
 import { Countries } from "src/constants/metadata";
 import { getAllMeetingsInfo, getAllSeekerRequestsAction } from "src/actions/userAction";
 
-const getBadge = (status) => {
-    switch (status) {
-        case "accepted":
-            return "success";
-        case "":
-            return "warning";
-        case "rejected":
-            return "danger";
-        default:
-            return "primary";
-    }
-};
+// const getBadge = (status) => {
+//     switch (status) {
+//         case "accepted":
+//             return "success";
+//         case "":
+//             return "warning";
+//         case "rejected":
+//             return "danger";
+//         default:
+//             return "primary";
+//     }
+// };
 
 const ScheduleMeeting = (props) => {
     //constants
+    const { authUser } = props;
     const history = useHistory();
     const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
     const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
@@ -35,6 +36,7 @@ const ScheduleMeeting = (props) => {
     const [isNotificationEdit, setIsNotificationEdit] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
+        host_user_id: authUser?.uid,
         meeting_dateAndTime: new Date(),
         meeting_country: Countries[0]?.value,
         notification_title: "Meeting Scheduled",
@@ -83,10 +85,11 @@ const ScheduleMeeting = (props) => {
         e.preventDefault();
         setIsLoading(true);
         if (isValidMeetingDate(formData?.meeting_dateAndTime) && isValidCountry()) {
+            setErrors({ field: "common", value: "" });
             // Handle form submission
-            const res = await fetch("http://localhost:5000/schedule-meeting", {
+            const res = await fetch(`${process.env.REACT_APP_BASE_API_URL}/schedule-meeting`, {
                 method: "post",
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ host_user_id: authUser?.uid, ...formData }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                 },
@@ -95,7 +98,7 @@ const ScheduleMeeting = (props) => {
                 props.getAllMeetings();
                 setIsLoading(false);
             }
-            console.log("res", res);
+            // console.log("res", res);
             setIsLoading(false);
         } else {
             // Display an error message or take other appropriate actions
@@ -208,10 +211,7 @@ const ScheduleMeeting = (props) => {
                                 </CCardBody>
                             </CCard>
                             <CButton color="primary" type="submit" disabled={isLoading}>
-                                Schedule and Push Notification{" "}
-                                {isLoading && (
-                                    <CSpinner size="sm"/>
-                                )}
+                                Schedule and Push Notification {isLoading && <CSpinner size="sm" />}
                             </CButton>
                         </CForm>
                     </CCardBody>
@@ -291,6 +291,7 @@ const ScheduleMeeting = (props) => {
 
 const mapStateToProps = (state) => ({
     meetingRequests: state.auth.meetings,
+    authUser: state.auth.authUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({

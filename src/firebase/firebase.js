@@ -82,30 +82,30 @@ export const requestPermission = () => {
 
 requestPermission();
 
-export const onMessageListener = () =>
-    new Promise((resolve) => {
-        onMessage(messaging, (payload) => {
-            console.log("PAYLOAD--", payload);
-            const notificationTitle = payload.notification.title;
-            const notificationOptions = {
-                body: payload.notification.body,
-                icon: "./favicon.png",
-                vibrate: [200, 100, 200, 100, 200, 100, 200],
-            };
+// export const onMessageListener = () =>
+//     new Promise((resolve) => {
+//         onMessage(messaging, (payload) => {
+//             console.log("PAYLOAD--", payload);
+//             const notificationTitle = payload.notification.title;
+//             const notificationOptions = {
+//                 body: payload.notification.body,
+//                 icon: "/favicon.png",
+//                 vibrate: [200, 100, 200, 100, 200, 100, 200],
+//             };
 
-            // eslint-disable-next-line no-restricted-globals
-            self.registration.showNotification(notificationTitle, notificationOptions);
-            // eslint-disable-next-line no-undef
-            // runtime.register().then(registration => {
-            //     registration.showNotification(notificationTitle, notificationOptions);
-            // })
-            // if ("serviceWorker" in navigator) {
+//             // eslint-disable-next-line no-restricted-globals
+//             self.registration.showNotification(notificationTitle, notificationOptions);
+//             // eslint-disable-next-line no-undef
+//             // runtime.register().then(registration => {
+//             //     registration.showNotification(notificationTitle, notificationOptions);
+//             // })
+//             // if ("serviceWorker" in navigator) {
 
-            // }
-            resolve(payload);
-        });
-    });
+//             // }
+//             resolve(payload);
+//         });
+//     });
 
-onMessageListener();
+// onMessageListener();
 
 export { auth, db, messaging };
